@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sari.Clock &#8212; Clock Python 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="Clock Python 1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for sari.Clock</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">from</span> <span class="nn">pygame.locals</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">radians</span>
+
+
+<div class="viewcode-block" id="ModelClock"><a class="viewcode-back" href="../../sari.html#sari.Clock.ModelClock">[docs]</a><span class="k">class</span> <span class="nc">ModelClock</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Diese Applikation zeigt eine Uhr an. Die Uhrzeit kann analog, aber auch digital angezeigt werden.</span>
+<span class="sd">    Mit der Taste P ist es Möglich bei der analogen Uhr zwischen der kontinuierlichen oder der</span>
+<span class="sd">    diskreten Variante zu wechseln.</span>
+<span class="sd">    Es is ein switchen zwischen Digital und Analog mit der Taste A und D möglich.</span>
+
+<span class="sd">    In der Model Klasse dieser Applikation werden wichtige Daten, wie zum Beispiel die Anzeigenart</span>
+<span class="sd">    (Analog oder Digital), wichtige Koordinaten oder auch Farben gespeichert.</span>
+
+<span class="sd">    __version__ = &#39;1.0&#39;</span>
+<span class="sd">    __author__ = &#39;Yunus Sari&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isAnalog</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isSmooth</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xAxis</span> <span class="o">=</span> <span class="mi">300</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yAxis</span> <span class="o">=</span> <span class="mi">300</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xAxis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">yAxis</span><span class="p">)</span>
+        <span class="s2">&quot;Colors&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="p">(</span><span class="mi">220</span><span class="p">,</span> <span class="mi">220</span><span class="p">,</span> <span class="mi">220</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">secondHand</span> <span class="o">=</span> <span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minuteHand</span> <span class="o">=</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hourHand</span> <span class="o">=</span> <span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">markers</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ViewClockAnalog"><a class="viewcode-back" href="../../sari.html#sari.Clock.ViewClockAnalog">[docs]</a><span class="k">class</span> <span class="nc">ViewClockAnalog</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Diese View-Klasse, dient zur Darstellund der Uhrzeit in analoger Form.</span>
+
+<span class="sd">    __version__ = &#39;1.0&#39;</span>
+<span class="sd">    __author__ = &#39;Yunus Sari&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modelclock</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span> <span class="o">=</span> <span class="n">modelclock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">field</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="mi">600</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">background</span><span class="p">)</span>
+        <span class="n">time_save</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">localtime</span><span class="p">()</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">time_save</span><span class="o">.</span><span class="n">tm_sec</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">isSmooth</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">%</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">time_save</span><span class="o">.</span><span class="n">tm_min</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">time_save</span><span class="o">.</span><span class="n">tm_hour</span>
+        <span class="k">if</span> <span class="n">h</span> <span class="o">&gt;</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">-=</span> <span class="mi">12</span>
+        <span class="n">hm</span> <span class="o">=</span> <span class="p">(</span><span class="n">h</span> <span class="o">+</span> <span class="n">m</span> <span class="o">/</span> <span class="mf">60.0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">5</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">background</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">center</span><span class="p">,</span> <span class="mi">222</span><span class="p">)</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">hourHand</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">center</span><span class="p">,</span>
+                         <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">xAxis</span> <span class="o">+</span> <span class="mi">180</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">radians</span><span class="p">(</span><span class="n">hm</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">-</span> <span class="mi">90</span><span class="p">))),</span>
+                          <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">yAxis</span> <span class="o">+</span> <span class="mi">180</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">radians</span><span class="p">(</span><span class="n">hm</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">-</span> <span class="mi">90</span><span class="p">)))),</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">minuteHand</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">center</span><span class="p">,</span>
+                         <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">xAxis</span> <span class="o">+</span> <span class="mi">210</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">radians</span><span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">-</span> <span class="mi">90</span><span class="p">))),</span>
+                          <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">yAxis</span> <span class="o">+</span> <span class="mi">210</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">radians</span><span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">-</span> <span class="mi">90</span><span class="p">)))),</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">secondHand</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">center</span><span class="p">,</span>
+                         <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">xAxis</span> <span class="o">+</span> <span class="mi">220</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">radians</span><span class="p">(</span><span class="n">s</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">-</span> <span class="mi">90</span><span class="p">))),</span>
+                          <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">yAxis</span> <span class="o">+</span> <span class="mi">220</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">radians</span><span class="p">(</span><span class="n">s</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">-</span> <span class="mi">90</span><span class="p">)))),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">markers</span><span class="p">,</span>
+                             <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">xAxis</span> <span class="o">+</span> <span class="mi">282</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">radians</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">-</span> <span class="mi">90</span><span class="p">))),</span>
+                              <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">yAxis</span> <span class="o">+</span> <span class="mi">282</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">radians</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">-</span> <span class="mi">90</span><span class="p">)))),</span>
+                             <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">xAxis</span> <span class="o">+</span> <span class="mi">298</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">radians</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">-</span> <span class="mi">90</span><span class="p">))),</span>
+                              <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">yAxis</span> <span class="o">+</span> <span class="mi">298</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">radians</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">-</span> <span class="mi">90</span><span class="p">)))),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">markers</span><span class="p">,</span>
+                               <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">xAxis</span> <span class="o">+</span> <span class="mi">290</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">radians</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">30</span> <span class="o">-</span> <span class="mi">90</span><span class="p">))),</span>
+                                <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">yAxis</span> <span class="o">+</span> <span class="mi">290</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">radians</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">30</span> <span class="o">-</span> <span class="mi">90</span><span class="p">)))),</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ViewClockDigital"><a class="viewcode-back" href="../../sari.html#sari.Clock.ViewClockDigital">[docs]</a><span class="k">class</span> <span class="nc">ViewClockDigital</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Diese View-Klasse, dient zur Darstellund der Uhrzeit in digitaler Form.</span>
+
+<span class="sd">    __version__ = &#39;1.0&#39;</span>
+<span class="sd">    __author__ = &#39;Yunus Sari&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modelclock</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span> <span class="o">=</span> <span class="n">modelclock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">field</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="mi">600</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">background</span><span class="p">)</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+        <span class="n">zeit</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">localtime</span><span class="p">()</span>
+        <span class="n">seku</span> <span class="o">=</span> <span class="n">zeit</span><span class="o">.</span><span class="n">tm_sec</span>
+        <span class="n">minu</span> <span class="o">=</span> <span class="n">zeit</span><span class="o">.</span><span class="n">tm_min</span>
+        <span class="n">hour</span> <span class="o">=</span> <span class="n">zeit</span><span class="o">.</span><span class="n">tm_hour</span>
+        <span class="k">if</span> <span class="n">seku</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">seku</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">seku</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">minu</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">minu</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">minu</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">hour</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">hour</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">hour</span><span class="p">)</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">markers</span><span class="p">,</span> <span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">195</span><span class="p">,</span> <span class="mi">445</span><span class="p">,</span> <span class="mi">160</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">background</span><span class="p">,</span> <span class="p">(</span><span class="mi">85</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">435</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">myfont</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">SysFont</span><span class="p">(</span><span class="s2">&quot;Arial&quot;</span><span class="p">,</span> <span class="mi">125</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">myfont</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">hour</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">minu</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">seku</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">font</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">210</span><span class="p">))</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ControllerClock"><a class="viewcode-back" href="../../sari.html#sari.Clock.ControllerClock">[docs]</a><span class="k">class</span> <span class="nc">ControllerClock</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Die Klasse Controller beinhaltet alle wichtigen Funktionen.</span>
+<span class="sd">    Hier wurden die Befehle zum Ändern der Anzeigeart, zwischen Analog und Digital, als auch zwischen</span>
+<span class="sd">    kontinuierlich und diskreter Variante, geschrieben.</span>
+
+<span class="sd">    __version__ = &#39;1.0&#39;</span>
+<span class="sd">    __author__ = &#39;Yunus Sari&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modelclock</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span> <span class="o">=</span> <span class="n">modelclock</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">isAnalog</span><span class="p">:</span>
+            <span class="n">ViewClockAnalog</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ViewClockDigital</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">handleevent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">QUIT</span> <span class="ow">or</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">KEYDOWN</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">K_ESCAPE</span><span class="p">):</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">KEYDOWN</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">K_d</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">isAnalog</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">KEYDOWN</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">K_p</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">isSmooth</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">isSmooth</span>
+                <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">KEYDOWN</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">K_a</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">isAnalog</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="o">.</span><span class="n">isAnalog</span><span class="p">:</span>
+                <span class="n">ViewClockAnalog</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ViewClockDigital</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ModelClock</span><span class="p">)</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">ControllerClock</span><span class="p">(</span><span class="n">ModelClock</span><span class="p">())</span><span class="o">.</span><span class="n">handleevent</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Yunus Sari.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.8</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

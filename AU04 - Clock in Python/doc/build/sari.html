@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>classes &#8212; Clock Python 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Clock Python 1.0 documentation" href="index.html" />
+    <link rel="up" title="&lt;no title&gt;" href="modules.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="modules.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="classes">
+<h1>classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-sari.Clock">
+<span id="controllerclock"></span><h2>ControllerClock<a class="headerlink" href="#module-sari.Clock" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sari.Clock.ControllerClock">
+<em class="property">class </em><code class="descclassname">sari.Clock.</code><code class="descname">ControllerClock</code><span class="sig-paren">(</span><em>modelclock</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sari/Clock.html#ControllerClock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sari.Clock.ControllerClock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Die Klasse Controller beinhaltet alle wichtigen Funktionen.
+Hier wurden die Befehle zum Ändern der Anzeigeart, zwischen Analog und Digital, als auch zwischen
+kontinuierlich und diskreter Variante, geschrieben.</p>
+<p>__version__ = &#8216;1.0&#8217;
+__author__ = &#8216;Yunus Sari&#8217;</p>
+<dl class="attribute">
+<dt id="sari.Clock.ControllerClock.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#sari.Clock.ControllerClock.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-sari.Clock">
+<span id="modelclock"></span><h2>ModelClock<a class="headerlink" href="#module-sari.Clock" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sari.Clock.ModelClock">
+<em class="property">class </em><code class="descclassname">sari.Clock.</code><code class="descname">ModelClock</code><a class="reference internal" href="_modules/sari/Clock.html#ModelClock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sari.Clock.ModelClock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Diese Applikation zeigt eine Uhr an. Die Uhrzeit kann analog, aber auch digital angezeigt werden.
+Mit der Taste P ist es Möglich bei der analogen Uhr zwischen der kontinuierlichen oder der
+diskreten Variante zu wechseln.
+Es is ein switchen zwischen Digital und Analog mit der Taste A und D möglich.</p>
+<p>In der Model Klasse dieser Applikation werden wichtige Daten, wie zum Beispiel die Anzeigenart
+(Analog oder Digital), wichtige Koordinaten oder auch Farben gespeichert.</p>
+<p>__version__ = &#8216;1.0&#8217;
+__author__ = &#8216;Yunus Sari&#8217;</p>
+<dl class="attribute">
+<dt id="sari.Clock.ModelClock.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#sari.Clock.ModelClock.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="sari.Clock.ModelClock.center">
+<code class="descname">center</code><em class="property"> = None</em><a class="headerlink" href="#sari.Clock.ModelClock.center" title="Permalink to this definition">¶</a></dt>
+<dd><p>Colors</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-sari.Clock">
+<span id="viewclockanalog"></span><h2>ViewClockAnalog<a class="headerlink" href="#module-sari.Clock" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sari.Clock.ViewClockAnalog">
+<em class="property">class </em><code class="descclassname">sari.Clock.</code><code class="descname">ViewClockAnalog</code><span class="sig-paren">(</span><em>modelclock</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sari/Clock.html#ViewClockAnalog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sari.Clock.ViewClockAnalog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Diese View-Klasse, dient zur Darstellund der Uhrzeit in analoger Form.</p>
+<p>__version__ = &#8216;1.0&#8217;
+__author__ = &#8216;Yunus Sari&#8217;</p>
+<dl class="attribute">
+<dt id="sari.Clock.ViewClockAnalog.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#sari.Clock.ViewClockAnalog.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-sari.Clock">
+<span id="viewclockdigital"></span><h2>ViewClockDigital<a class="headerlink" href="#module-sari.Clock" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sari.Clock.ViewClockDigital">
+<em class="property">class </em><code class="descclassname">sari.Clock.</code><code class="descname">ViewClockDigital</code><span class="sig-paren">(</span><em>modelclock</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sari/Clock.html#ViewClockDigital"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sari.Clock.ViewClockDigital" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Diese View-Klasse, dient zur Darstellund der Uhrzeit in digitaler Form.</p>
+<p>__version__ = &#8216;1.0&#8217;
+__author__ = &#8216;Yunus Sari&#8217;</p>
+<dl class="attribute">
+<dt id="sari.Clock.ViewClockDigital.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#sari.Clock.ViewClockDigital.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">classes</a><ul>
+<li><a class="reference internal" href="#module-sari.Clock">ControllerClock</a></li>
+<li><a class="reference internal" href="#module-sari.Clock">ModelClock</a></li>
+<li><a class="reference internal" href="#module-sari.Clock">ViewClockAnalog</a></li>
+<li><a class="reference internal" href="#module-sari.Clock">ViewClockDigital</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">&lt;no title&gt;</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">&lt;no title&gt;</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/sari.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Yunus Sari.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.8</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/sari.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

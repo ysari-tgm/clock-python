@@ -3,23 +3,20 @@ import time
 import pygame
 from pygame.locals import *
 from math import sin, cos, radians
-"""
-    Diese Applikation zeigt eine Uhr an. Die Uhrzeit kann analog, aber auch digital angezeigt werden.
-    Mit der Taste P ist es Möglich bei der analogen Uhr zwischen der kontinuierlichen oder der
-    diskreten Variante zu wechseln.
-    (Es sollte ein switchen zwischen Digital und Analog mit der Taste A und D möglich sein.
-    Funktionert aber nicht. Stattdessen muss man im Code die Variable isAnalog von True auf False setzen.
-
-    __version__ = '1.0'
-    __author__ = 'Yunus Sari'
-
-"""
 
 
 class ModelClock:
     """
+    Diese Applikation zeigt eine Uhr an. Die Uhrzeit kann analog, aber auch digital angezeigt werden.
+    Mit der Taste P ist es Möglich bei der analogen Uhr zwischen der kontinuierlichen oder der
+    diskreten Variante zu wechseln.
+    Es is ein switchen zwischen Digital und Analog mit der Taste A und D möglich.
+
     In der Model Klasse dieser Applikation werden wichtige Daten, wie zum Beispiel die Anzeigenart
     (Analog oder Digital), wichtige Koordinaten oder auch Farben gespeichert.
+
+    __version__ = '1.0'
+    __author__ = 'Yunus Sari'
     """
     def __init__(self):
         self.isAnalog = True
@@ -28,30 +25,25 @@ class ModelClock:
         self.yAxis = 300
         self.center = (self.xAxis, self.yAxis)
         "Colors"
-        self.background = (188, 188, 188)
+        self.background = (220, 220, 220)
         self.secondHand = (150, 80, 80)
         self.minuteHand = (200, 80, 80)
         self.hourHand = (250, 80, 80)
         self.markers = (100, 0, 0)
         self.font = (50, 50, 50)
-
+        pygame.init()
 
 class ViewClockAnalog:
     """
     Diese View-Klasse, dient zur Darstellund der Uhrzeit in analoger Form.
+
+    __version__ = '1.0'
+    __author__ = 'Yunus Sari'
     """
     def __init__(self, modelclock):
         self.ModelClock = modelclock
         self.field = pygame.display.set_mode((600, 600))
         self.field.fill(self.ModelClock.background)
-        for i in range(0, 60, 1):
-            pygame.draw.circle(self.field, self.ModelClock.markers,
-                               (int(self.ModelClock.xAxis + 290 * cos(radians(i * 6 - 90))),
-                                int(self.ModelClock.yAxis + 290 * sin(radians(i * 6 - 90)))), 2)
-        for i in range(0, 12, 1):
-            pygame.draw.circle(self.field, self.ModelClock.markers,
-                               (int(self.ModelClock.xAxis + 290 * cos(radians(i * 30 - 90))),
-                                int(self.ModelClock.yAxis + 290 * sin(radians(i * 30 - 90)))), 8)
         time_save = time.localtime()
         s = time_save.tm_sec
         if self.ModelClock.isSmooth:
@@ -71,12 +63,25 @@ class ViewClockAnalog:
         pygame.draw.line(self.field, self.ModelClock.secondHand, self.ModelClock.center,
                          (int(self.ModelClock.xAxis + 220 * cos(radians(s * 6 - 90))),
                           int(self.ModelClock.yAxis + 220 * sin(radians(s * 6 - 90)))), 1)
+        for i in range(0, 60, 1):
+            pygame.draw.line(self.field, self.ModelClock.markers,
+                             (int(self.ModelClock.xAxis + 282 * cos(radians(i * 6 - 90))),
+                              int(self.ModelClock.yAxis + 282 * sin(radians(i * 6 - 90)))),
+                             (int(self.ModelClock.xAxis + 298 * cos(radians(i * 6 - 90))),
+                              int(self.ModelClock.yAxis + 298 * sin(radians(i * 6 - 90)))), 2)
+        for i in range(0, 12, 1):
+            pygame.draw.circle(self.field, self.ModelClock.markers,
+                               (int(self.ModelClock.xAxis + 290 * cos(radians(i * 30 - 90))),
+                                int(self.ModelClock.yAxis + 290 * sin(radians(i * 30 - 90)))), 10)
         pygame.display.update()
 
 
 class ViewClockDigital:
     """
     Diese View-Klasse, dient zur Darstellund der Uhrzeit in digitaler Form.
+
+    __version__ = '1.0'
+    __author__ = 'Yunus Sari'
     """
     def __init__(self, modelclock):
         self.ModelClock = modelclock
@@ -106,6 +111,9 @@ class ControllerClock:
     Die Klasse Controller beinhaltet alle wichtigen Funktionen.
     Hier wurden die Befehle zum Ändern der Anzeigeart, zwischen Analog und Digital, als auch zwischen
     kontinuierlich und diskreter Variante, geschrieben.
+
+    __version__ = '1.0'
+    __author__ = 'Yunus Sari'
     """
     def __init__(self, modelclock):
         self.ModelClock = modelclock
@@ -119,12 +127,12 @@ class ControllerClock:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
                     sys.exit(0)
+                if event.type == KEYDOWN and event.key == K_d:
+                    self.ModelClock.isAnalog = False
                 if event.type == KEYDOWN and event.key == K_p:
                     self.ModelClock.isSmooth = not self.ModelClock.isSmooth
                 if event.type == KEYDOWN and event.key == K_a:
-                    ModelClock.isAnalog = True
-                if event.type == KEYDOWN and event.key == K_d:
-                    ModelClock.isAnalog = False
+                    self.ModelClock.isAnalog = True
             if self.ModelClock.isAnalog:
                 ViewClockAnalog(self.ModelClock)
             else:
